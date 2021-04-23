@@ -1,5 +1,11 @@
 {
   "name": "Key gen",
   "description": "A java app to generate tokens",
-  "repository": "https://github.com/abora8x8/test-heroku.git"
+  "repository": "https://github.com/abora8x8/test-heroku.git",
+  "env": {
+    "HELLO": {
+      "description": "name of the person to greet",
+      "value": "8x8"
+    }
+  }
 }
