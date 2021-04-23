@@ -25,11 +25,10 @@ public class JaaSJwtBuilder {
 
 
     private JWTCreator.Builder jwtBuilder;
-    private Algorithm algorithm;
     private Map<String, Object> userClaims;
     private Map<String, Object> featureClaims;
 
-    public JaaSJwtBuilder() {
+    private JaaSJwtBuilder() {
         userClaims = new HashMap<>();
         featureClaims = new HashMap<>();
         jwtBuilder = JWT.create();
@@ -235,7 +234,7 @@ public class JaaSJwtBuilder {
      * @return A signed JWT.
      */
     public String signWith(RSAPrivateKey privateKey) {
-        algorithm = Algorithm.RSA256(null, privateKey);
+        Algorithm algorithm = Algorithm.RSA256(null, privateKey);
         Map<String, Object> context = new HashMap<String, Object>() {{
             put("user", userClaims);
             put("features", featureClaims);
@@ -245,6 +244,6 @@ public class JaaSJwtBuilder {
                 .withClaim("iss", "chat")
                 .withClaim("aud", "jitsi")
                 .withClaim("context", context)
-                .sign(this.algorithm);
+                .sign(algorithm);
     }
 }

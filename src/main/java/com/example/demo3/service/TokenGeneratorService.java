@@ -76,6 +76,7 @@ public class TokenGeneratorService {
                     .withLobbyEnabled(permissions.contains(LOBBY))
                     .withRecordingEnabled(permissions.contains(RECORDING))
                     .withTenantName(TenantUtils.extractTenant(kid))
+                    .withApiKey(kid)
                     .signWith(getPemPrivateKey(privateKey));
         } catch (Exception ex) {
             log.error("", ex);
