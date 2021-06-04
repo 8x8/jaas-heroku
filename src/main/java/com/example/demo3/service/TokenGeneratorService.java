@@ -22,7 +22,7 @@ public class TokenGeneratorService {
     /**
      * Placeholder helper string.
      */
-    private static final String BEGIN_PRIVATE_KEY = "-----BEGIN (.*)-----";
+    private static final String BEGIN_PRIVATE_KEY = "^-----BEGIN (.*?)-----";
 
     /**
      * Placeholder helper string.
@@ -53,9 +53,9 @@ public class TokenGeneratorService {
     private static String stripBeginEnd(String pem) {
         String stripped = pem.replaceFirst(BEGIN_PRIVATE_KEY, EMPTY);
         stripped = stripped.replaceFirst(END_PRIVATE_KEY, EMPTY);
-        stripped = stripped.replaceAll("\r\n", EMPTY);
+        stripped = stripped.replaceAll("\r", EMPTY);
+        stripped = stripped.replaceAll("\\s+", EMPTY);
         stripped = stripped.replaceAll("\n", EMPTY);
-        stripped = stripped.replaceAll("\\n", EMPTY);
         return stripped.trim();
     }
 
