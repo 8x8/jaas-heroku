@@ -1,4 +1,4 @@
-package com.example.demo3.utils;
+package com.eght.token_generator.utils;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

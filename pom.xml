@@ -13,11 +13,11 @@
 		<springfox-swagger2.version>2.9.2</springfox-swagger2.version>
 	</properties>
 
-	<groupId>com.example</groupId>
-	<artifactId>demo3</artifactId>
+	<groupId>com.eght</groupId>
+	<artifactId>token_generator</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>demo3</name>
-	<description>Demo project for Spring Boot</description>
+	<name>token_generator</name>
+	<description>JaaS token generator</description>
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

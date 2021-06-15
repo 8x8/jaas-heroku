@@ -1,14 +1,14 @@
 {
-  "name": "Key gen",
-  "description": "A java app to generate tokens",
+  "name": "JaaS token generator",
+  "description": "A java app to generate jaas tokens",
   "repository": "https://github.com/abora8x8/test-heroku.git",
   "env": {
     "KID": {
-      "description": "Id of the public key",
+      "description": "Please enter the key id from the JaaS admin console",
       "value": ""
     },
     "PRIVATE_KEY": {
-      "description": "JaaS private key",
+      "description": "Please enter the JaaS private key",
       "value": ""
     }
   }
