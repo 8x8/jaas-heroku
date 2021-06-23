@@ -29,7 +29,7 @@ public class SwaggerConfiguration {
                         "8x8 key gen service",
                         "1",
                         "Placeholder Terms of Service",
-                        new Contact("8x8", "http://8x8.com", "vmms@8x8.com"),
+                        new Contact("8x8", "https://www.8x8.com/products/apis/video", "jaastech@8x8.com"),
                         null, null
                         , emptyList())
                 );

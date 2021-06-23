@@ -1,10 +1,10 @@
 {
   "name": "JaaS token generator",
-  "description": "A java app to generate jaas tokens",
+  "description": "A java app to generate Jitsi as a Service (https://jaas.8x8.vc) tokens",
   "repository": "https://github.com/abora8x8/test-heroku.git",
   "env": {
     "KID": {
-      "description": "Please enter the key id from the JaaS admin console",
+      "description": "Please enter the key id from the JaaS admin console (https://developer.8x8.com/jaas/docs/jaas-console-api-keys)",
       "value": ""
     },
     "PRIVATE_KEY": {

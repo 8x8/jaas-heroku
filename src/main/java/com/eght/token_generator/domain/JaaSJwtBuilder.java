@@ -169,13 +169,13 @@ public class JaaSJwtBuilder {
     }
 
     /**
-     * Sets the value for the sub claim representing the tenant name/unique identifier.
+     * Sets the value for the sub claim representing the application identifier.
      *
-     * @param tenantName The tenant unique identifier.
+     * @param appId The application unique identifier.
      * @return Returns a new builder with sub claim set.
      */
-    public JaaSJwtBuilder withTenantName(String tenantName) {
-        jwtBuilder.withClaim("sub", tenantName);
+    public JaaSJwtBuilder withAppId(String appId) {
+        jwtBuilder.withClaim("sub", appId);
         return this;
     }
 

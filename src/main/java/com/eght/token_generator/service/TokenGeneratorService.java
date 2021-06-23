@@ -10,7 +10,7 @@ import java.security.KeyFactory;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.spec.PKCS8EncodedKeySpec;
 
-import static com.eght.token_generator.utils.TenantUtils.extractTenant;
+import static com.eght.token_generator.utils.JaaSUtils.extractAppId;
 
 @Service
 @Slf4j
@@ -28,7 +28,7 @@ public class TokenGeneratorService {
                 .withUserAvatar(tokenClaims.getAvatar())
                 .withModerator(tokenClaims.isModerator())
                 .withPermissions(tokenClaims.getPermissions())
-                .withTenantName(extractTenant(kid))
+                .withAppId(extractAppId(kid))
                 .withExpTime(tokenClaims.getExpTimestampSec())
                 .withNbfTime(tokenClaims.getNbfTimestampSec())
                 .withRoomName(tokenClaims.getRoomName())
