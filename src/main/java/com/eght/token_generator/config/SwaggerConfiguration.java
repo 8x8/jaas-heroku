@@ -1,12 +1,10 @@
-package com.example.demo3.config;
+package com.eght.token_generator.config;
 
 
 import io.swagger.annotations.Api;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
-import springfox.documentation.schema.ModelRef;
 import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
@@ -14,7 +12,6 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import static java.util.Collections.emptyList;
-import static java.util.Collections.singletonList;
 
 
 @Configuration
@@ -32,16 +29,9 @@ public class SwaggerConfiguration {
                         "8x8 key gen service",
                         "1",
                         "Placeholder Terms of Service",
-                        new Contact("8x8", "http://8x8.com", "vmms@8x8.com"),
+                        new Contact("8x8", "https://www.8x8.com/products/apis/video", "jaastech@8x8.com"),
                         null, null
-                        , emptyList()))
-                .globalOperationParameters(singletonList(new ParameterBuilder()
-                        .name("Authorization")
-                        .description("Http request Authorization header")
-                        .modelRef(new ModelRef("string"))
-                        .parameterType("header")
-                        .required(false)
-                        .build())
+                        , emptyList())
                 );
     }
 }

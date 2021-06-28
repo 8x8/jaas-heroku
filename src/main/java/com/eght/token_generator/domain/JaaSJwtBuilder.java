@@ -1,14 +1,16 @@
-package com.example.demo3.domain;
+package com.eght.token_generator.domain;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator;
 import com.auth0.jwt.algorithms.Algorithm;
 
 import java.security.interfaces.RSAPrivateKey;
-import java.time.Instant;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import static java.time.Instant.now;
 
 public class JaaSJwtBuilder {
     /**
@@ -27,10 +29,12 @@ public class JaaSJwtBuilder {
     private JWTCreator.Builder jwtBuilder;
     private Map<String, Object> userClaims;
     private Map<String, Object> featureClaims;
+    private Map<String, Object> roomClaims;
 
     private JaaSJwtBuilder() {
         userClaims = new HashMap<>();
         featureClaims = new HashMap<>();
+        roomClaims = new HashMap<>();
         jwtBuilder = JWT.create();
     }
 
@@ -47,13 +51,11 @@ public class JaaSJwtBuilder {
      * Sets the value for the kid header claim. Represents the JaaS api key.
      * You can find the api key here : https://jaas.8x8.vc/#/apikeys
      *
-     * @param apiKey
+     * @param kid
      * @return Returns a new builder with kid claim set.
      */
-    public JaaSJwtBuilder withApiKey(String apiKey) {
-        if (apiKey != null) {
-            jwtBuilder.withKeyId(apiKey);
-        }
+    public JaaSJwtBuilder withKID(String kid) {
+        jwtBuilder.withKeyId(kid);
         return this;
     }
 
@@ -102,57 +104,22 @@ public class JaaSJwtBuilder {
     }
 
     /**
-     * Sets the value for the live streaming feature claim. If value is true recording is enabled, false otherwise.
+     * Sets the allowed features
      *
-     * @param isEnabled
-     * @return Returns a new builder with livestreaming claim set.
+     * @param permissions List of allowed features
+     * @return Returns a new builder after setting the allowed features
      */
-    public JaaSJwtBuilder withLiveStreamingEnabled(boolean isEnabled) {
-        featureClaims.put("livestreaming", isEnabled);
-        return this;
-    }
-
-    /**
-     * Sets the value for the recording feature claim. If value is true recording is enabled, false otherwise.
-     *
-     * @param isEnabled
-     * @return Returns a new builder with recording claim set.
-     */
-    public JaaSJwtBuilder withRecordingEnabled(boolean isEnabled) {
-        featureClaims.put("recording", isEnabled);
-        return this;
-    }
-
-    /**
-     * Sets the value for the outbound feature claim. If value is true outbound calls are enabled, false otherwise.
-     *
-     * @param isEnabled
-     * @return Returns a new builder with outbound-call claim set.
-     */
-    public JaaSJwtBuilder withOutboundEnabled(boolean isEnabled) {
-        featureClaims.put("outbound-call", isEnabled);
-        return this;
-    }
-
-    /**
-     * Sets the value for the outbound feature claim. If value is true outbound calls are enabled, false otherwise.
-     *
-     * @param isEnabled
-     * @return Returns a new builder with outbound-call claim set.
-     */
-    public JaaSJwtBuilder withLobbyEnabled(boolean isEnabled) {
-        featureClaims.put("lobby", isEnabled);
-        return this;
-    }
-
-    /**
-     * Sets the value for the transcription feature claim. If value is true transcription is enabled, false otherwise.
-     *
-     * @param isEnabled
-     * @return Returns a new builder with transcription claim set.
-     */
-    public JaaSJwtBuilder withTranscriptionEnabled(boolean isEnabled) {
-        featureClaims.put("transcription", String.valueOf(isEnabled));
+    public JaaSJwtBuilder withPermissions(List<Permissions> permissions) {
+        if (permissions == null) {
+            return this;
+        }
+        featureClaims.put("livestreaming", permissions.contains(Permissions.LIVESTREAMING));
+        featureClaims.put("recording", permissions.contains(Permissions.RECORDING));
+        featureClaims.put("transcription", permissions.contains(Permissions.TRANSCRIPTION));
+        featureClaims.put("inbound-call", permissions.contains(Permissions.INBOUND_CALL));
+        featureClaims.put("outbound-call", permissions.contains(Permissions.OUTBOUND_CALL));
+        featureClaims.put("sip-inbound-call", permissions.contains(Permissions.SIP_INBOUND_CALL));
+        featureClaims.put("sip-outbound-call", permissions.contains(Permissions.SIP_OUTBOUND_CALL));
         return this;
     }
 
@@ -162,8 +129,8 @@ public class JaaSJwtBuilder {
      * @param expTime Unix timestamp is expected.
      * @return Returns a new builder with exp claim set.
      */
-    public JaaSJwtBuilder withExpTime(long expTime) {
-        jwtBuilder.withClaim("exp", expTime);
+    public JaaSJwtBuilder withExpTime(Long expTime) {
+        jwtBuilder.withClaim("exp", expTime != null ? expTime : now().getEpochSecond() + EXP_TIME_DELAY_SEC);
         return this;
     }
 
@@ -173,8 +140,19 @@ public class JaaSJwtBuilder {
      * @param nbfTime Unix timestamp is expected.
      * @return Returns a new builder with nbf claim set.
      */
-    public JaaSJwtBuilder withNbfTime(long nbfTime) {
-        jwtBuilder.withClaim("nbf", nbfTime);
+    public JaaSJwtBuilder withNbfTime(Long nbfTime) {
+        jwtBuilder.withClaim("nbf", nbfTime != null ? nbfTime : now().getEpochSecond() - NBF_TIME_DELAY_SEC);
+        return this;
+    }
+
+    /**
+     * Allows regex matching for the room name
+     *
+     * @param regexRoom
+     * @return Returns a new builder with room claim set.
+     */
+    public JaaSJwtBuilder withRegexRoom(boolean regexRoom) {
+        roomClaims.put("regex", regexRoom);
         return this;
     }
 
@@ -191,13 +169,13 @@ public class JaaSJwtBuilder {
     }
 
     /**
-     * Sets the value for the sub claim representing the tenant name/unique identifier.
+     * Sets the value for the sub claim representing the application identifier.
      *
-     * @param tenantName The tenant unique identifier.
+     * @param appId The application unique identifier.
      * @return Returns a new builder with sub claim set.
      */
-    public JaaSJwtBuilder withTenantName(String tenantName) {
-        jwtBuilder.withClaim("sub", tenantName);
+    public JaaSJwtBuilder withAppId(String appId) {
+        jwtBuilder.withClaim("sub", appId);
         return this;
     }
 
@@ -208,23 +186,8 @@ public class JaaSJwtBuilder {
      * @return Returns a new builder with kid claim set.
      */
     public JaaSJwtBuilder withUserId(String userId) {
-        jwtBuilder.withClaim("id", userId != null ? userId : UUID.randomUUID().toString());
+        userClaims.put("id", userId != null ? userId : UUID.randomUUID().toString());
         return this;
-    }
-
-    /**
-     * Fills the default values for required claims.
-     *
-     * @return Returns a new builder with needed claim set to default values.
-     */
-    public JaaSJwtBuilder withDefaults() {
-        return this.withExpTime(Instant.now().getEpochSecond() + EXP_TIME_DELAY_SEC) // Default value, no change needed.
-                .withNbfTime(Instant.now().getEpochSecond() - NBF_TIME_DELAY_SEC) // Default value, no change needed.
-                .withLiveStreamingEnabled(true)
-                .withRecordingEnabled(true)
-                .withModerator(true)
-                .withRoomName("*")
-                .withUserId(UUID.randomUUID().toString());
     }
 
     /**
@@ -235,11 +198,10 @@ public class JaaSJwtBuilder {
      */
     public String signWith(RSAPrivateKey privateKey) {
         Algorithm algorithm = Algorithm.RSA256(null, privateKey);
-        Map<String, Object> context = new HashMap<String, Object>() {{
-            put("user", userClaims);
-            put("features", featureClaims);
-        }};
-
+        Map<String, Object> context = new HashMap<>();
+        context.put("user", userClaims);
+        context.put("features", featureClaims);
+        context.put("room", roomClaims);
         return jwtBuilder
                 .withClaim("iss", "chat")
                 .withClaim("aud", "jitsi")
