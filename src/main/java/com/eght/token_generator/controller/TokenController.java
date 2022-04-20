@@ -5,9 +5,11 @@ import com.eght.token_generator.error.DependencyException;
 import com.eght.token_generator.service.TokenGeneratorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,6 +20,7 @@ import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.util.StringUtils.isEmpty;
 
 @RestController
+@CrossOrigin
 @Api(tags = "Jaas token generator controller")
 @Validated
 public class TokenController {
