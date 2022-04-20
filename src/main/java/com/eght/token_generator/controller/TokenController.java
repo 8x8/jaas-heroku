@@ -5,7 +5,6 @@ import com.eght.token_generator.error.DependencyException;
 import com.eght.token_generator.service.TokenGeneratorService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.validation.annotation.Validated;
